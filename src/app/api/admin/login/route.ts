@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   }
 
   const res = NextResponse.json({ ok: true });
-  res.cookies.set(ADMIN_COOKIE_NAME, tokenForPassword(password), {
+  res.cookies.set(ADMIN_COOKIE_NAME, await tokenForPassword(password), {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
