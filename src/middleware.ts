@@ -4,7 +4,7 @@ import { ADMIN_COOKIE_NAME, isValidAdminToken } from "@/lib/admin-auth";
 
 // Gates every /admin/* route except the login page itself behind a simple
 // password-derived cookie. See src/lib/admin-auth.ts.
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === "/admin/login") {
