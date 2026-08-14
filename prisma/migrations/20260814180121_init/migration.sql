@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "JobRequest" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "email" TEXT,
@@ -11,13 +11,15 @@ CREATE TABLE "JobRequest" (
     "issueDetails" TEXT,
     "photoUrl" TEXT,
     "preferredTime" TEXT NOT NULL,
-    "scheduledFor" DATETIME,
+    "scheduledFor" TIMESTAMP(3),
     "serviceTier" TEXT NOT NULL,
     "dispatchFeeCents" INTEGER NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'pending_payment',
     "stripeSessionId" TEXT,
     "stripePaymentStatus" TEXT,
-    "notes" TEXT
+    "notes" TEXT,
+
+    CONSTRAINT "JobRequest_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
