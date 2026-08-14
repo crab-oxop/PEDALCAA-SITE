@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Container } from "@/components/container";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -28,8 +26,11 @@ export default function AdminLoginPage() {
       return;
     }
 
-    router.push("/admin");
-    router.refresh();
+    // Use a full page navigation (not router.push) so the browser makes a
+    // fresh request to /admin with the new cookie attached. This also
+    // avoids a client-side router transition hang some Next.js versions hit
+    // right after an auth cookie changes underneath the current route.
+    window.location.href = "/admin";
   }
 
   return (
