@@ -1,0 +1,276 @@
+@import "tailwindcss";
+
+/*
+  Design tokens — one system, reused everywhere. See also:
+  - src/components/icons.tsx   (icon language)
+  - src/components/reveal.tsx  (motion primitive)
+
+  Intentional choice: this is a fixed premium dark product, not a
+  light/dark-mode-follows-OS site. "Paper" (near-white) is used as a
+  deliberate section treatment for editorial pacing, the way a print
+  magazine alternates spreads — not as a user-toggled theme.
+*/
+:root {
+  /* Surfaces */
+  --color-void: #0a0a09;
+  --color-charcoal: #161613;
+  --color-paper: #f2efe7;
+  --color-paper-dim: #e6e2d6;
+
+  /* Ink */
+  --color-ink: #f6f4ee;
+  --color-ink-muted: #aea99b;
+  --color-ink-faint: #726d5f;
+  --color-ink-on-paper: #17170f;
+  --color-ink-on-paper-muted: #5c5747;
+
+  /* Accents — used sparingly, on purpose */
+  --color-accent-orange: #ff5a1f;
+  --color-accent-orange-dim: #e0470f;
+  --color-accent-green: #2f7c53;
+  --color-accent-green-deep: #0c3a29;
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-familjen);
+  --font-mono: var(--font-geist-mono);
+}
+
+@theme inline {
+  --color-void: var(--color-void);
+  --color-charcoal: var(--color-charcoal);
+  --color-paper: var(--color-paper);
+  --color-paper-dim: var(--color-paper-dim);
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-ink-faint: var(--color-ink-faint);
+  --color-ink-on-paper: var(--color-ink-on-paper);
+  --color-ink-on-paper-muted: var(--color-ink-on-paper-muted);
+  --color-accent-orange: var(--color-accent-orange);
+  --color-accent-orange-dim: var(--color-accent-orange-dim);
+  --color-accent-green: var(--color-accent-green);
+  --color-accent-green-deep: var(--color-accent-green-deep);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* Fluid display type scale — tight negative tracking, low line-height */
+  --text-hero: clamp(2.75rem, 2vw + 2.25rem, 6.75rem);
+  --text-hero--line-height: 0.98;
+  --text-hero--letter-spacing: -0.04em;
+
+  --text-display-lg: clamp(2.25rem, 1.6vw + 1.85rem, 4.25rem);
+  --text-display-lg--line-height: 1.03;
+  --text-display-lg--letter-spacing: -0.035em;
+
+  --text-display-md: clamp(1.75rem, 1vw + 1.5rem, 2.5rem);
+  --text-display-md--line-height: 1.08;
+  --text-display-md--letter-spacing: -0.025em;
+
+  --text-display-sm: clamp(1.375rem, 0.5vw + 1.2rem, 1.625rem);
+  --text-display-sm--line-height: 1.2;
+  --text-display-sm--letter-spacing: -0.015em;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.18em;
+
+  /* Section rhythm */
+  --spacing-section-sm: clamp(3.5rem, 3vw + 2.5rem, 5.5rem);
+  --spacing-section-md: clamp(5rem, 5vw + 3rem, 8.5rem);
+  --spacing-section-lg: clamp(6.5rem, 7vw + 3.5rem, 11rem);
+
+  /* Motion — timing borrowed directly from patek.com/en's own CSS
+     (cubic-bezier(0.19,1,0.22,1), a 300–800ms duration range): unhurried,
+     confident, never snappy. */
+  --ease-premium: cubic-bezier(0.19, 1, 0.22, 1);
+  --duration-fast: 350ms;
+  --duration-base: 750ms;
+  --duration-slow: 900ms;
+  --duration-kenburns: 20s;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  /* Familjen Grotesk reads slightly loose at body sizes by default —
+     tighten a touch and open the leading, rather than keep Geist's
+     tuning on a different face. */
+  letter-spacing: -0.011em;
+  line-height: 1.6;
+}
+
+::selection {
+  background: var(--color-accent-green);
+  color: var(--color-ink);
+}
+
+/* Eyebrow label: replaces pill badges site-wide */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 1.25rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+/* Animated underline for inline text links */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+  background-image: linear-gradient(
+    var(--link-underline-color, currentColor),
+    var(--link-underline-color, currentColor)
+  );
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--duration-base) var(--ease-premium);
+}
+
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Buttons — confident, monochrome-first. Hover is a lift, not a flip. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding: 0.9rem 1.75rem;
+  border-radius: 999px;
+  transition:
+    transform var(--duration-fast) var(--ease-premium),
+    box-shadow var(--duration-fast) var(--ease-premium),
+    border-color var(--duration-fast) var(--ease-premium),
+    background-color var(--duration-fast) var(--ease-premium);
+  will-change: transform;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+}
+
+.btn:active {
+  transform: scale(0.99);
+}
+
+.btn-primary-on-dark {
+  background: var(--color-ink);
+  color: var(--color-void);
+}
+
+.btn-primary-on-dark:hover {
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-accent-green) 55%, transparent),
+    0 12px 32px -12px color-mix(in oklab, var(--color-ink) 40%, transparent);
+}
+
+.btn-primary-on-paper {
+  background: var(--color-ink-on-paper);
+  color: var(--color-paper);
+}
+
+.btn-primary-on-paper:hover {
+  box-shadow: 0 12px 32px -14px color-mix(in oklab, var(--color-ink-on-paper) 60%, transparent);
+}
+
+.btn-ghost {
+  border: 1px solid color-mix(in oklab, currentColor 22%, transparent);
+  background: transparent;
+  color: currentColor;
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-accent-green);
+  background: color-mix(in oklab, var(--color-accent-green) 10%, transparent);
+}
+
+/* Scroll reveal primitive — see src/components/reveal.tsx */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--duration-slow) var(--ease-premium),
+    transform var(--duration-slow) var(--ease-premium);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .btn,
+  .link-underline {
+    transition: none;
+  }
+}
+
+/* Hero art: slow settle-in scale on load */
+/* Continuous, barely-perceptible zoom on hero/feature photography —
+   a static substitute for the slow product video a site like this would
+   otherwise use. Breathes in and out rather than resetting abruptly. */
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.animate-kenburns {
+  animation: kenburns var(--duration-kenburns) ease-in-out infinite alternate;
+}
+
+/* Slow crossfade between gallery images, see work-gallery.tsx */
+.crossfade {
+  transition: opacity var(--duration-slow) var(--ease-premium);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-kenburns {
+    animation: none;
+  }
+}
+
+/* Route-change crossfade, see src/app/template.tsx */
+@keyframes route-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.route-transition {
+  animation: route-in var(--duration-slow) var(--ease-premium) both;
+}
