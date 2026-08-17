@@ -2,17 +2,23 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { ADMIN_COOKIE_NAME, isValidAdminToken } from "@/lib/admin-auth";
 
-// Gates every /admin/* route except the login page itself behind a simple
-// password-derived cookie. See src/lib/admin-auth.ts.
+// Gates every /admin/* page and /api/admin/* route behind a simple
+// password-derived cookie, except the login page/endpoint themselves.
+// See src/lib/admin-auth.ts.
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname === "/admin/login") {
+  if (pathname === "/admin/login" || pathname === "/api/admin/login") {
     return NextResponse.next();
   }
 
   const token = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
   if (!(await isValidAdminToken(token))) {
+    // API routes get a plain 401 — a redirect would otherwise hand a fetch()
+    // caller the login page's HTML with a followed-redirect 200 status.
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const loginUrl = new URL("/admin/login", request.url);
     return NextResponse.redirect(loginUrl);
   }
@@ -21,5 +27,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
 };

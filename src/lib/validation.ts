@@ -33,3 +33,23 @@ export const bookingSchema = z
   );
 
 export type BookingInput = z.infer<typeof bookingSchema>;
+
+export const reviewSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, "Enter your name")
+    .max(80, "Keep your name under 80 characters"),
+  rating: z
+    .number()
+    .int("Pick a rating")
+    .min(1, "Pick a rating")
+    .max(5, "Pick a rating"),
+  comment: z
+    .string()
+    .trim()
+    .min(10, "Tell us a bit more (at least 10 characters)")
+    .max(600, "Keep your review under 600 characters"),
+});
+
+export type ReviewInput = z.infer<typeof reviewSchema>;

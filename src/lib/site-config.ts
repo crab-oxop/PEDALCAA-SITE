@@ -10,6 +10,11 @@ export const siteConfig = {
   shortDescription:
     "On-demand mobile bike repair for the Greater Toronto Area. A mechanic comes to you — no hauling your bike across town.",
 
+  // Canonical site URL used for SEO tags (sitemap, Open Graph, canonical links).
+  // TODO: [PLACEHOLDER] swap to the real custom domain (e.g. "https://pedalcaa.com")
+  // once one is connected in Vercel — until then this points at the vercel.app URL.
+  url: "https://pedalcaa-site-sage.vercel.app",
+
   phoneDisplay: "(XXX) XXX-XXXX", // TODO: [PLACEHOLDER] real phone number
   phoneHref: "tel:+1XXXXXXXXXX", // TODO: [PLACEHOLDER] real phone number in tel: format
   email: "hello@pedalcaa.com", // TODO: [PLACEHOLDER] real support inbox

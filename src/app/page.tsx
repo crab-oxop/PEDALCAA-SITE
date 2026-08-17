@@ -6,9 +6,16 @@ import { Grain } from "@/components/grain";
 import { WorkGallery } from "@/components/work-gallery";
 import { CoverageMap } from "@/components/coverage-map";
 import { HowItWorksSteps } from "@/components/how-it-works-steps";
+import { StarRating } from "@/components/star-rating";
 import { IconArrowRight, IconClock, IconPhone } from "@/components/icons";
 import { siteConfig } from "@/lib/site-config";
 import { dispatchFees } from "@/lib/pricing";
+import { prisma } from "@/lib/prisma";
+
+// Home is otherwise fully static; revalidate periodically so the reviews
+// teaser below doesn't go stale forever without paying for force-dynamic
+// on the whole marketing page.
+export const revalidate = 60;
 
 // TODO: [PLACEHOLDER copy] illustrative bike photos, not verified job
 // records — swap captions/images for real before/after job photos once
@@ -80,7 +87,13 @@ const certifications = [
   "E-bike safety certified",
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const recentReviews = await prisma.review.findMany({
+    where: { hidden: false },
+    orderBy: { createdAt: "desc" },
+    take: 3,
+  });
+
   return (
     <>
       {/* Hero — full-bleed, cinematic, lower-third headline */}
@@ -251,6 +264,53 @@ export default function HomePage() {
           </Reveal>
         </Container>
       </section>
+
+      {/* What customers are saying — live reviews teaser */}
+      {recentReviews.length > 0 && (
+        <section className="bg-charcoal py-[var(--spacing-section-md)]">
+          <Container>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <Reveal>
+                  <p className="eyebrow text-accent-green">Reviews</p>
+                </Reveal>
+                <Reveal delay={80}>
+                  <h2 className="mt-5 max-w-xl text-display-md font-display text-ink">
+                    What customers are saying.
+                  </h2>
+                </Reveal>
+              </div>
+              <Reveal delay={120}>
+                <Link
+                  href="/reviews"
+                  className="link-underline flex items-center gap-2 text-sm text-ink-muted hover:text-ink"
+                >
+                  Read all reviews
+                  <IconArrowRight size={14} />
+                </Link>
+              </Reveal>
+            </div>
+
+            <div className="mt-12 grid gap-10 sm:grid-cols-3 sm:divide-x sm:divide-white/10">
+              {recentReviews.map((review, i) => (
+                <Reveal
+                  key={review.id}
+                  delay={160 + i * 110}
+                  className={i > 0 ? "sm:pl-10" : undefined}
+                >
+                  <StarRating rating={review.rating} size={14} />
+                  <p className="mt-4 text-sm leading-relaxed text-ink-muted">
+                    &ldquo;{review.comment}&rdquo;
+                  </p>
+                  <p className="mt-4 text-xs tracking-wide text-ink-faint uppercase">
+                    {review.name}
+                  </p>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Final CTA — typography only, huge scale */}
       <section className="bg-void py-[var(--spacing-section-lg)] text-center">

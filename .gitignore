@@ -51,3 +51,9 @@ prisma/dev.db*
 /public/uploads/*
 !/public/uploads/.gitkeep
 
+
+# Local tool/editor scratch dirs and one-off handoff artifacts — not part of the project.
+/.agents/
+/.claude/
+/.windsurf/
+/*.bundle

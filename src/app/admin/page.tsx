@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { prisma } from "@/lib/prisma";
 import { formatCents } from "@/lib/pricing";
+import { AdminReviewRow } from "@/components/admin-review-row";
 
 export const metadata: Metadata = {
   title: "Job Requests — Admin",
@@ -19,10 +20,16 @@ const statusDot: Record<string, string> = {
 };
 
 export default async function AdminPage() {
-  const jobs = await prisma.jobRequest.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 200,
-  });
+  const [jobs, reviews] = await Promise.all([
+    prisma.jobRequest.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 200,
+    }),
+    prisma.review.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 200,
+    }),
+  ]);
 
   return (
     <section className="bg-void pt-32 pb-24">
@@ -117,6 +124,41 @@ export default async function AdminPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        <div className="mt-16 border-t border-white/10 pt-8">
+          <h2 className="font-display text-2xl text-ink">Reviews</h2>
+          <p className="mt-2 text-sm text-ink-faint">
+            {reviews.length} review{reviews.length === 1 ? "" : "s"}. Delete
+            is the only moderation action for v1 — reviews go live
+            immediately on submission.
+          </p>
+
+          <div className="mt-8 overflow-x-auto">
+            <table className="w-full min-w-[800px] text-left text-sm">
+              <thead>
+                <tr className="border-b border-white/10 text-ink-faint">
+                  <th className="py-3 pr-4 font-medium">Received</th>
+                  <th className="py-3 pr-4 font-medium">Name</th>
+                  <th className="py-3 pr-4 font-medium">Rating</th>
+                  <th className="py-3 pr-4 font-medium">Comment</th>
+                  <th className="py-3 pr-4 font-medium">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reviews.map((review) => (
+                  <AdminReviewRow key={review.id} review={review} />
+                ))}
+                {reviews.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="py-10 text-center text-ink-faint">
+                      No reviews yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </Container>
     </section>
