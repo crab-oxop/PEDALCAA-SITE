@@ -4,6 +4,7 @@ import { Reveal } from "@/components/reveal";
 import { StarRating } from "@/components/star-rating";
 import { ReviewForm } from "@/components/review-form";
 import { prisma } from "@/lib/prisma";
+import { repairName } from "@/lib/pricing";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -67,7 +68,14 @@ export default async function ReviewsPage() {
                       {review.createdAt.toLocaleDateString()}
                     </span>
                   </div>
-                  <StarRating rating={review.rating} size={14} className="mt-2" />
+                  <div className="mt-2 flex flex-wrap items-center gap-3">
+                    <StarRating rating={review.rating} size={14} />
+                    {repairName(review.repairType) && (
+                      <span className="rounded-sm border border-white/15 px-2.5 py-1 text-xs font-medium tracking-wide text-ink-muted">
+                        {repairName(review.repairType)}
+                      </span>
+                    )}
+                  </div>
                   <p className="mt-3 text-sm leading-relaxed text-ink-muted">
                     {review.comment}
                   </p>

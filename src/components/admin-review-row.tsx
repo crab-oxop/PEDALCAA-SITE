@@ -3,11 +3,19 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { StarRating } from "@/components/star-rating";
+import { repairName } from "@/lib/pricing";
 
 export function AdminReviewRow({
   review,
 }: {
-  review: { id: string; name: string; rating: number; comment: string; createdAt: Date };
+  review: {
+    id: string;
+    name: string;
+    rating: number;
+    comment: string;
+    repairType: string | null;
+    createdAt: Date;
+  };
 }) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
@@ -37,11 +45,17 @@ export function AdminReviewRow({
   return (
     <tr className="border-b border-white/10 align-top">
       <td className="py-4 pr-4 whitespace-nowrap text-ink-faint">
-        {review.createdAt.toLocaleString()}
+        {/* Fixed locale — this is a Client Component, so it hydrates;
+            without a fixed locale, server (Node ICU default) and client
+            (browser locale) can render different date strings. */}
+        {review.createdAt.toLocaleString("en-CA")}
       </td>
       <td className="py-4 pr-4 font-medium text-ink">{review.name}</td>
       <td className="py-4 pr-4 whitespace-nowrap">
         <StarRating rating={review.rating} size={14} />
+      </td>
+      <td className="py-4 pr-4 whitespace-nowrap text-ink-muted">
+        {repairName(review.repairType) ?? "—"}
       </td>
       <td className="py-4 pr-4 max-w-md text-ink-muted">{review.comment}</td>
       <td className="py-4 pr-4">

@@ -31,6 +31,7 @@ export async function POST(request: Request) {
       name: parsed.data.name,
       rating: parsed.data.rating,
       comment: parsed.data.comment,
+      repairType: parsed.data.repairType || null,
     },
   });
 

@@ -50,6 +50,9 @@ export const reviewSchema = z.object({
     .trim()
     .min(10, "Tell us a bit more (at least 10 characters)")
     .max(600, "Keep your review under 600 characters"),
+  // Same option set as bookingSchema.issueType — left blank means "general
+  // feedback / other", not tied to one repair.
+  repairType: z.union([z.enum(issueTypeIds), z.literal("")]).optional(),
 });
 
 export type ReviewInput = z.infer<typeof reviewSchema>;

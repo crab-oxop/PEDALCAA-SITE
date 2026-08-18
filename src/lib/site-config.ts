@@ -15,8 +15,8 @@ export const siteConfig = {
   // once one is connected in Vercel — until then this points at the vercel.app URL.
   url: "https://pedalcaa-site-sage.vercel.app",
 
-  phoneDisplay: "(XXX) XXX-XXXX", // TODO: [PLACEHOLDER] real phone number
-  phoneHref: "tel:+1XXXXXXXXXX", // TODO: [PLACEHOLDER] real phone number in tel: format
+  phoneDisplay: "(647) 929-1686",
+  phoneHref: "tel:+16479291686",
   email: "hello@pedalcaa.com", // TODO: [PLACEHOLDER] real support inbox
 
   serviceArea: {

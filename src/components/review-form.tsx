@@ -2,14 +2,19 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { IconStar } from "@/components/icons";
+import { IconChevronDown, IconStar } from "@/components/icons";
+import { repairs } from "@/lib/pricing";
+import type { IssueTypeId } from "@/lib/types";
 
-type FieldErrors = Partial<Record<"name" | "rating" | "comment", string>>;
+type FieldErrors = Partial<
+  Record<"name" | "rating" | "comment" | "repairType", string>
+>;
 
 export function ReviewForm() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [rating, setRating] = useState(0);
+  const [repairType, setRepairType] = useState<IssueTypeId | "">("");
   const [comment, setComment] = useState("");
   const [website, setWebsite] = useState(""); // honeypot — real users never see this
   const [submitting, setSubmitting] = useState(false);
@@ -27,7 +32,7 @@ export function ReviewForm() {
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, rating, comment, website }),
+        body: JSON.stringify({ name, rating, comment, repairType, website }),
       });
       const data = await res.json();
 
@@ -36,6 +41,7 @@ export function ReviewForm() {
           name: data.fieldErrors?.name?.[0],
           rating: data.fieldErrors?.rating?.[0],
           comment: data.fieldErrors?.comment?.[0],
+          repairType: data.fieldErrors?.repairType?.[0],
         });
         setFormError(data.error ?? "Something went wrong. Please try again.");
         setSubmitting(false);
@@ -45,6 +51,7 @@ export function ReviewForm() {
       setSuccess(true);
       setName("");
       setRating(0);
+      setRepairType("");
       setComment("");
       router.refresh();
     } catch {
@@ -104,6 +111,39 @@ export function ReviewForm() {
           placeholder="Jordan Lee"
           aria-describedby={errors.name ? "review-name-error" : undefined}
         />
+      </Field>
+
+      <Field
+        label="What was the repair?"
+        htmlFor="review-repair-type"
+        error={errors.repairType}
+      >
+        <div className="relative">
+          <select
+            id="review-repair-type"
+            value={repairType}
+            onChange={(e) =>
+              setRepairType(e.target.value as IssueTypeId | "")
+            }
+            className="field-input appearance-none pr-8"
+            aria-describedby={
+              errors.repairType ? "review-repair-type-error" : undefined
+            }
+          >
+            <option value="" className="bg-charcoal">
+              General feedback / other
+            </option>
+            {repairs.map((r) => (
+              <option key={r.id} value={r.id} className="bg-charcoal">
+                {r.name}
+              </option>
+            ))}
+          </select>
+          <IconChevronDown
+            size={16}
+            className="pointer-events-none absolute top-1/2 right-1 -translate-y-1/2 text-ink-faint"
+          />
+        </div>
       </Field>
 
       <Field label="Your review" htmlFor="review-comment" error={errors.comment}>

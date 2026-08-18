@@ -49,9 +49,10 @@ model Review {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  name    String
-  rating  Int // 1-5
-  comment String
+  name       String
+  rating     Int // 1-5
+  comment    String
+  repairType String? // what the review is about, e.g. "flat_tire" — same option set as JobRequest.issueType
 
   // Reviews are visible immediately; admin can delete anything inappropriate
   // after the fact rather than pre-moderating every submission.

@@ -135,12 +135,13 @@ export default async function AdminPage() {
           </p>
 
           <div className="mt-8 overflow-x-auto">
-            <table className="w-full min-w-[800px] text-left text-sm">
+            <table className="w-full min-w-[900px] text-left text-sm">
               <thead>
                 <tr className="border-b border-white/10 text-ink-faint">
                   <th className="py-3 pr-4 font-medium">Received</th>
                   <th className="py-3 pr-4 font-medium">Name</th>
                   <th className="py-3 pr-4 font-medium">Rating</th>
+                  <th className="py-3 pr-4 font-medium">Repair</th>
                   <th className="py-3 pr-4 font-medium">Comment</th>
                   <th className="py-3 pr-4 font-medium">Action</th>
                 </tr>
@@ -151,7 +152,7 @@ export default async function AdminPage() {
                 ))}
                 {reviews.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="py-10 text-center text-ink-faint">
+                    <td colSpan={6} className="py-10 text-center text-ink-faint">
                       No reviews yet.
                     </td>
                   </tr>

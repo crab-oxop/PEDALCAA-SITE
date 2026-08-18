@@ -9,7 +9,7 @@ import { HowItWorksSteps } from "@/components/how-it-works-steps";
 import { StarRating } from "@/components/star-rating";
 import { IconArrowRight, IconClock, IconPhone } from "@/components/icons";
 import { siteConfig } from "@/lib/site-config";
-import { dispatchFees } from "@/lib/pricing";
+import { dispatchFees, repairName } from "@/lib/pricing";
 import { prisma } from "@/lib/prisma";
 
 // Home is otherwise fully static; revalidate periodically so the reviews
@@ -298,7 +298,14 @@ export default async function HomePage() {
                   delay={160 + i * 110}
                   className={i > 0 ? "sm:pl-10" : undefined}
                 >
-                  <StarRating rating={review.rating} size={14} />
+                  <div className="flex flex-wrap items-center gap-3">
+                    <StarRating rating={review.rating} size={14} />
+                    {repairName(review.repairType) && (
+                      <span className="rounded-sm border border-white/15 px-2.5 py-1 text-xs font-medium tracking-wide text-ink-muted">
+                        {repairName(review.repairType)}
+                      </span>
+                    )}
+                  </div>
                   <p className="mt-4 text-sm leading-relaxed text-ink-muted">
                     &ldquo;{review.comment}&rdquo;
                   </p>

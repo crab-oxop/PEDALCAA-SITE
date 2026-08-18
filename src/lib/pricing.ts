@@ -94,3 +94,10 @@ export const repairs: {
 export function formatCents(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
+
+// Looks up the human-readable label for a stored issue-type/repair-type id
+// (e.g. from JobRequest.issueType or Review.repairType). Both are stored as
+// plain strings, so this also tolerates unrecognized/legacy values.
+export function repairName(id: string | null | undefined): string | undefined {
+  return repairs.find((r) => r.id === id)?.name;
+}
