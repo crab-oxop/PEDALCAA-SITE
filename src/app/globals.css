@@ -250,7 +250,14 @@ body {
 
 /* Slow crossfade between gallery images, see work-gallery.tsx */
 .crossfade {
-  transition: opacity var(--duration-slow) var(--ease-premium);
+  /* Both sub-transitions live in this one shorthand (rather than adding a
+     separate Tailwind transition-transform utility alongside it) since a
+     second `transition` shorthand on the same element would silently
+     clobber this one. Hover-zoom scale rides the opacity crossfade's
+     easing but with its own faster, more literal duration. */
+  transition:
+    opacity var(--duration-slow) var(--ease-premium),
+    transform 500ms ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {

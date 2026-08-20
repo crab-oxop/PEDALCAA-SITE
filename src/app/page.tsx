@@ -58,28 +58,6 @@ const recentWork = [
   },
 ];
 
-// TODO: [PLACEHOLDER copy] illustrative reviews — swap for real customer quotes before launch.
-const testimonials = [
-  {
-    quote:
-      "Flat tire on my commute, mechanic showed up in 25 minutes and I was back on the road before my next meeting.",
-    name: "J. Alvarez",
-    location: "Toronto",
-  },
-  {
-    quote:
-      "Way easier than hauling my e-bike into a shop and waiting a week. They came to my building's parking garage.",
-    name: "S. Chen",
-    location: "Richmond Hill",
-  },
-  {
-    quote:
-      "Booked a scheduled tune-up for a Saturday morning, mechanic was on time and explained everything.",
-    name: "M. Osei",
-    location: "Toronto",
-  },
-];
-
 // TODO: [PLACEHOLDER copy] confirm real certifications/insurance details before launch.
 const certifications = [
   "Certified bicycle mechanics",
@@ -231,32 +209,12 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
-      {/* Riders — editorial, light section for pacing contrast */}
-      <section className="bg-paper py-[var(--spacing-section-md)] text-ink-on-paper">
+      {/* Certifications — compact trust strip, light pacing beat leading
+          into the live reviews section below */}
+      <section className="bg-paper py-[var(--spacing-section-sm)] text-ink-on-paper">
         <Container>
           <Reveal>
-            <p className="eyebrow text-ink-on-paper-muted">Riders</p>
-          </Reveal>
-          <div className="mt-10 grid gap-10 sm:grid-cols-3 sm:divide-x sm:divide-black/10">
-            {testimonials.map((t, i) => (
-              <Reveal
-                key={t.name}
-                delay={i * 110}
-                className={i > 0 ? "sm:pl-10" : undefined}
-              >
-                <blockquote>
-                  <p className="text-display-sm font-display leading-snug text-ink-on-paper">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-                  <footer className="mt-5 border-t border-black/10 pt-4 text-xs tracking-wide text-ink-on-paper-muted uppercase">
-                    {t.name} — {t.location}
-                  </footer>
-                </blockquote>
-              </Reveal>
-            ))}
-          </div>
-          <Reveal delay={330}>
-            <div className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-black/10 pt-8 text-xs tracking-wide text-ink-on-paper-muted uppercase">
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs tracking-wide text-ink-on-paper-muted uppercase">
               {certifications.map((c) => (
                 <span key={c}>{c}</span>
               ))}
